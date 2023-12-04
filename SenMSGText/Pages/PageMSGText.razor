@@ -1,0 +1,55 @@
+﻿@page "/message"
+@using SenMSGText.Data
+@inject TwilioSmsService twilioSmsService
+<!-- SendMSGComponent.razor -->
+<div>
+    <h3>Enviar Mensaje</h3>
+
+    <form @onsubmit="EnviarMensaje">
+        <div class="form-group">
+            <label for="NumeroDestino">Número de Destino:</label>
+            <input type="text" class="form-control" @bind="sendMsg.NumeroDestino" />
+        </div>
+
+        <div class="form-group">
+            <label for="Mensaje">Mensaje:</label>
+            <textarea class="form-control" @bind="sendMsg.Mensaje"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enviar</button><br />
+        <a target="_blank" href=@url>Enviar mensaje</a>
+        <span>@error</span>
+        <span>@url</span>
+    </form>
+</div>
+
+@code {
+    private SendMSG sendMsg = new SendMSG();
+    private string error = "";
+    private string url="";
+    private async Task EnviarMensaje()
+    {
+        // https://wa.me/1XXXXXXXXXX?text=I'm%20interested%20in%20your%20car%20for%20sale
+        url = "https://wa.me/" + sendMsg.NumeroDestino + "?text=" + sendMsg.Mensaje;
+        // Aquí puedes manejar la lógica para enviar el mensaje
+        // Puedes utilizar la instancia de 'sendMsg' para acceder a los datos del formulario
+        // Por ejemplo, puedes utilizar 'sendMsg.NumeroDestino' y 'sendMsg.Mensaje'
+        // para enviar el mensaje a través de la lógica de tu aplicación.
+        try
+        {
+            //await twilioSmsService.EnviarMensajeAsync(sendMsg.NumeroDestino, sendMsg.Mensaje);
+        }
+        catch(Exception ex) {
+            error = ex.Message;
+        }        
+        sendMsg = new SendMSG();
+    }
+
+    // SendMSG.cs
+    public class SendMSG
+    {
+        public string NumeroDestino { get; set; }
+        public string Mensaje { get; set; }
+    }
+
+}
